@@ -8,7 +8,7 @@
 ##
 cmake_minimum_required(VERSION 3.13)
 
-project(libpal C CXX)
+project(paws-cli C CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_STANDARD 17)
