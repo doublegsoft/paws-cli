@@ -1,0 +1,39 @@
+wait 5s
+click@"deepseek.png"!(10, 10)
+
+wait 3s
+click@(723,909)
+
+// wait 3s
+// paste "hello deepseek"
+
+wait 3s
+click@"upload.png"!(20, 20)
+
+wait 3s
+click@"christian.png"!(20, 20)
+
+wait 3s
+click@"image.png"!(50, 50)
+
+wait 3s
+click@"open.png"!(20, 20)
+
+wait 3s
+click@(866, 153)
+
+wait 3s
+click@"open.png"!(20, 20)
+
+wait 3s
+click@(723,909)
+
+wait 3s
+enter
+
+wait 15s
+click@"copy.png"!(10, 10)
+
+wait 1s 
+save "deepseek.log"
+
