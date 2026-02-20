@@ -115,6 +115,11 @@ void handleOnEnter() override
   CGEventPost(kCGHIDEventTap, event);
   CFRelease(event);
 }
+
+void handleOnRemove(const char* path) override
+{
+
+}
   
 ClixMacSimulator* simulator;
   
@@ -154,7 +159,7 @@ main(int argc, char* argv[])
     NSError* error = nil;
     NSString* filePath = [NSString stringWithUTF8String:pal];
     NSString* fileContent = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-    
+
     prog.Evaluate([fileContent UTF8String], (int)fileContent.length);
   }
   
