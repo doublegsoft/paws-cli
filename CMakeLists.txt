@@ -8,18 +8,28 @@
 ##
 cmake_minimum_required(VERSION 3.13)
 
-project(libpal C CXX)
+project(paws-cli C CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_STANDARD 17)
 
 if (WIN32)
 elseif (APPLE)
-  set(PLATFORM                          "darwin")
+  set(PLATFORM                        "darwin")
 elseif (UNIX)
-  set(PLATFORM                          "linux")
+  set(PLATFORM                        "linux")
 endif()
 set(BUILD                             "build/${PLATFORM}")
+
+################################################################################
+##                                                                            ##
+##                                   argparse                                 ##
+##                                                                            ##
+################################################################################
+set(ARGPARSE_DIR                      "3rd/argparse-1.1.0")
+set(ARGPARSE_INCLUDE_DIR              "${ARGPARSE_DIR}")
+set(ARGPARSE_LIBRARY_DIR              "${ARGPARSE_DIR}/${BUILD}")
+set(ARGPARSE_LIBRARIES                argparse)
 
 ################################################################################
 ##                                                                            ##
@@ -61,9 +71,20 @@ set(GFC_INCLUDE_DIR                   "${GFC_DIR}/include")
 set(GFC_LIBRARY_DIR                   "${GFC_DIR}/${BUILD}")
 set(GFC_LIBRARIES                     gfc)
 
+################################################################################
+##                                                                            ##
+##                                   md4c                                     ##
+##                                                                            ##
+################################################################################
+set(MD4C_DIR                          "3rd/gfc/md4c-0.5.2")
+set(MD4C_INCLUDE_DIR                  "${MD4C_DIR}/src")
+set(MD4C_LIBRARY_DIR                  "${MD4C_DIR}/${BUILD}/src")
+set(MD4C_LIBRARIES                    md4c)
+
 
 include_directories(
   "src"
+  ${ARGPARSE_INCLUDE_DIR}
   ${ANTLR4_INCLUDE_DIR}
   ${GFC_INCLUDE_DIR}
   ${LIBCLIX_INCLUDE_DIR}
@@ -71,6 +92,7 @@ include_directories(
 )
 
 link_directories(
+  ${ARGPARSE_LIBRARY_DIR}
   ${LIBCLIX_LIBRARY_DIR}
   ${LIBPAL_LIBRARY_DIR}
   ${GFC_LIBRARY_DIR}
@@ -94,6 +116,7 @@ target_link_libraries(paws
   ${LIBCLIX_LIBRARIES}
   ${LIBPAL_LIBRARIES}
   ${GFC_LIBRARIES}
+  ${ARGPARSE_LIBRARIES}
   "-framework foundation"
   "-framework carbon"
   "-framework cocoa"

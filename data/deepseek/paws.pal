@@ -1,0 +1,30 @@
+click@"deepseek.png"!(10, 10)
+
+click@"upload.png"!(20, 20)
+
+click@"christian.png"!(20, 20)
+
+click@"image.png"!(50, 50)
+
+click@"open.png"!(20, 20)
+
+// 选择第一个图片
+click@(866, 189)
+
+click@"open.png"!(20, 20)
+
+click@(723,909)
+paste "比较左右两张图片，只需要告诉我相同或者不相同"
+
+// 等待上传图片完成
+wait 10s 
+enter
+
+wait 15s
+click@"copy.png"!(10, 10)
+
+wait 1s 
+save "deepseek.log"
+
+plugin#remove("/Users/christian/images")
+

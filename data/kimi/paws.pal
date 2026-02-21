@@ -1,0 +1,10 @@
+wait 5s
+click@"vision/chrome.png"!(10, 10)
+// click@(750,1060)
+wait 3s
+click@(275,90)
+wait 3s
+paste "https://kimi.moonshot.cn"
+wait 3s
+enter
+
