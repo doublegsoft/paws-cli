@@ -14,6 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_STANDARD 17)
 
 if (WIN32)
+  set(PLATFORM                        "mingw")
 elseif (APPLE)
   set(PLATFORM                        "darwin")
 elseif (UNIX)
@@ -98,10 +99,18 @@ link_directories(
   ${GFC_LIBRARY_DIR}
 )
 
-set(PAWS_SOURCES
-  src/mac/main.mm
-)
 
+if (WIN32)
+  # 
+elseif (APPLE)
+  set(PAWS_SOURCES
+    src/mac/main.mm
+  )
+elseif (UNIX)
+  set(PAWS_SOURCES
+    src/linux/main.cpp
+  )
+endif()
 
 ################################################################################
 #
@@ -112,17 +121,31 @@ add_executable(paws
   ${PAWS_SOURCES}
 )
 
-target_link_libraries(paws
-  ${LIBCLIX_LIBRARIES}
-  ${LIBPAL_LIBRARIES}
-  ${GFC_LIBRARIES}
-  ${ARGPARSE_LIBRARIES}
-  "-framework foundation"
-  "-framework carbon"
-  "-framework cocoa"
-  "-framework accelerate"
-  "-framework opencl"
-)
+if (WIN32)
+  # 
+elseif (APPLE)
+  target_link_libraries(paws
+    ${LIBCLIX_LIBRARIES}
+    ${LIBPAL_LIBRARIES}
+    ${GFC_LIBRARIES}
+    ${ARGPARSE_LIBRARIES}
+    "-framework foundation"
+    "-framework carbon"
+    "-framework cocoa"
+    "-framework accelerate"
+    "-framework opencl"
+  )
+elseif (UNIX)
+  target_link_libraries(paws
+    ${LIBCLIX_LIBRARIES}
+    ${LIBPAL_LIBRARIES}
+    ${GFC_LIBRARIES}
+    ${ARGPARSE_LIBRARIES}
+    Xtst 
+    X11 
+    Xext
+  )
+endif()
 
 set_target_properties(paws PROPERTIES
   BUILD_WITH_INSTALL_RPATH TRUE
