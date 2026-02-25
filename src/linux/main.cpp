@@ -6,7 +6,7 @@
 ** ██║░░░░░██║░░██║░░╚██╔╝░╚██╔╝░██████╔╝░░░░░░╚█████╔╝███████╗██║
 ** ╚═╝░░░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═════╝░░░░░░░░╚════╝░╚══════╝╚═╝
 */
-#include <clix-desktop.h>
+#include <clix-desktop.hpp>
 #include <gfc.h>
 #include <libpal.hpp>
 #include <argparse.h>
@@ -43,29 +43,29 @@ void handleOnClick(int x, int y, const char* imagePath, bool required, bool rela
     if (required) 
     {
       if (relative)
-        simulator->clickAtPointUntilFound(x, y, imagePath);
+        simulator->clickAtPointUntilFound(x, y, imagePath, 200);
       else
-        simulator->clickAtOffsetUntilFound(x, y, imagePath);
+        simulator->clickAtOffsetUntilFound(x, y, imagePath, 200);
     }
     else
     {
-      // clix_click_on_image_if_exists(context, imagePath);
+      simulator->clickAtOffsetIfFound(x, y, imagePath);
     }
   }
   else
   {
-    clix_click_at_point(context, x, y);
+    simulator->clickAt(x, y);
   }
 }
   
 void handleOnMove(int x, int y, const char* path) override
 {
-  clix_move_to_point(context, x, y);
+  simulator->moveTo(x, y);
 }
   
 void handleOnScroll(int offset, const char* direction, const char* path) override
 {
-  simulator->scroll(offset, direction);
+  simulator->scroll(offset);
 }
   
 void handleOnSave(const char* path) override
@@ -120,6 +120,8 @@ main(int argc, char* argv[])
   gfc_gc_init();
     
   PawsHandler handler;
+  pal::Program prog(&handler);
+  prog.Evaluate(pal);
   
   return 0;
 }
