@@ -28,12 +28,12 @@ public:
 
 PawsHandler()
 {
-  context = clix_context_init();
+  simulator = new ClixDesktopSimulator(pal_root_dir);
 }
   
 ~PawsHandler()
 {
-  clix_context_free(context);
+  delete simulator;
 }
 
 void handleOnClick(int x, int y, const char* imagePath, bool required, bool relative) override
@@ -42,7 +42,10 @@ void handleOnClick(int x, int y, const char* imagePath, bool required, bool rela
   {
     if (required) 
     {
-      // clix_click_on_image(context, imagePath);
+      if (relative)
+        simulator->clickAtPointUntilFound(x, y, imagePath);
+      else
+        simulator->clickAtOffsetUntilFound(x, y, imagePath);
     }
     else
     {
@@ -62,22 +65,22 @@ void handleOnMove(int x, int y, const char* path) override
   
 void handleOnScroll(int offset, const char* direction, const char* path) override
 {
-  clix_scroll(context, offset);
+  simulator->scroll(offset, direction);
 }
   
 void handleOnSave(const char* path) override
 {
-  clix_screen_capture(context, path);
+  simulator->save(path);
 }
   
 void handleOnPaste(const char* text) override
 {
-  clix_paste_from_text(context, text);
+  simulator->pasteFromText(text);
 }
   
 void handleOnEnter() override
 {
-  clix_enter(context);
+  simulator->enter();
 }
 
 void handleOnRemove(const char* path) override
@@ -86,7 +89,8 @@ void handleOnRemove(const char* path) override
 }
 
 private:
-  clix_context_t* context;
+  
+  ClixDesktopSimulator* simulator;
   
 };
 
