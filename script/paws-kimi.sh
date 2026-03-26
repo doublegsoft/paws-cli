@@ -9,5 +9,5 @@ export DYLD_LIBRARY_PATH=/export/local/works/doublegsoft.me/myhotkey/03.Developm
 /export/local/works/doublegsoft.me/myhotkey/03.Development/paws-cli/3rd/argparse-1.1.0/build/darwin
 
 build/darwin/paws \
--p data/deepseek/paws.pal \
--w data/deepseek
+-p data/kimi/paws.pal \
+-w data/kimi
