@@ -31,18 +31,23 @@ public:
   
 void handleOnClick(int x, int y, const char* imagePath, bool required, bool relative) override
 {
+  handleOnClick(x, y, 0, imagePath, required, relative);
+}
+
+void handleOnClick(int x, int y, int delta, const char* imagePath, bool required, bool relative) override
+{
   if (imagePath != NULL)
   {
     if (relative)
     {
       if (required)
-        [simulator clickAtOffsetX:x andY:y untilFound:[NSString stringWithFormat:@"%s/%s", pal_root_dir, imagePath]];
+        [simulator clickAtOffsetX:x andY:y untilFound:[NSString stringWithFormat:@"%s/%s", pal_root_dir, imagePath] byScroll:delta];
       else
         [simulator clickAtOffsetX:x andY:y ifFound:[NSString stringWithFormat:@"%s/%s", pal_root_dir, imagePath]];
     }
     else
       if (required)
-        ;// [simulator clickAtX:x andY:y untilSeen:[NSString stringWithFormat:@"%s/%s", PAL_ROOT_DIR, imagePath]];
+        [simulator clickAtX:x andY:y untilFound:[NSString stringWithFormat:@"%s/%s", PAL_ROOT_DIR, imagePath] byScroll:delta];
       else
         [simulator clickAtX:x andY:y ifFound:[NSString stringWithFormat:@"%s/%s", pal_root_dir, imagePath]];
   }
