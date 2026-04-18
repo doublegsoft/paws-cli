@@ -148,5 +148,6 @@ elseif (UNIX)
 endif()
 
 set_target_properties(paws PROPERTIES
-  BUILD_WITH_INSTALL_RPATH TRUE
+  BUILD_RPATH "$ORIGIN"
+  INSTALL_RPATH "$ORIGIN"
 )
