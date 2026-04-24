@@ -40,16 +40,19 @@ void handleOnClick(int x, int y, const char* imagePath, bool required, bool rela
 {
   if (imagePath != NULL) 
   {
+    std::string full_path = pal_root_dir;
+    full_path += "/";
+    full_path += imagePath;
     if (required) 
     {
       if (relative)
-        simulator->clickAtPointUntilFound(x, y, imagePath, 200);
+        simulator->clickAtOffsetUntilFound(x, y, full_path.c_str(), 200);
       else
-        simulator->clickAtOffsetUntilFound(x, y, imagePath, 200);
+        simulator->clickAtPointUntilFound(x, y, full_path.c_str(), 200);
     }
     else
     {
-      simulator->clickAtOffsetIfFound(x, y, imagePath);
+      simulator->clickAtOffsetIfFound(x, y, full_path.c_str());
     }
   }
   else
@@ -70,7 +73,53 @@ void handleOnScroll(int offset, const char* direction, const char* path) overrid
   
 void handleOnSave(const char* path) override
 {
-  simulator->save(path);
+  std::string full_path = pal_root_dir;
+  full_path += "/";
+  full_path += path;
+  FILE* fp = fopen(full_path.c_str(), "a"); 
+  if (fp == NULL) {
+    perror("fopen failed");
+    return;
+  }
+
+  const char *cmd = "wl-paste 2>/dev/null || "
+                      "xclip -selection clipboard -o 2>/dev/null || "
+                      "xsel --clipboard --output 2>/dev/null";
+
+  FILE* pipe = popen(cmd, "r");
+  if (!pipe) {
+    perror("popen");
+    return;
+  }
+
+  char* buf = NULL;
+  size_t cap = 0;
+  size_t len = 0;
+  char chunk[4096];
+
+  while (fgets(chunk, sizeof(chunk), pipe)) {
+    size_t clen = strlen(chunk);
+    if (len + clen + 1 > cap) {
+      cap = len + clen + 4096;
+      char* newbuf = (char*)realloc(buf, cap);
+      if (!newbuf) {
+        free(buf);
+        pclose(pipe);
+        return;
+      }
+      buf = newbuf;
+    }
+    memcpy(buf + len, chunk, clen);
+    len += clen;
+  }
+
+  if (buf) buf[len] = '\0';
+
+  fprintf(fp, "%s\n", buf);
+
+  pclose(pipe);
+  fclose(fp);
+  free(buf);
 }
   
 void handleOnPaste(const char* text) override
