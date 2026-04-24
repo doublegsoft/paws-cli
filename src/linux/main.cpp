@@ -60,6 +60,32 @@ void handleOnClick(int x, int y, const char* imagePath, bool required, bool rela
     simulator->clickAt(x, y);
   }
 }
+
+void handleOnClick(int x, int y, int delta, const char* path, bool required, bool relative) 
+{
+  // TODO
+  if (path != NULL) 
+  {
+    std::string full_path = pal_root_dir;
+    full_path += "/";
+    full_path += path;
+    if (required) 
+    {
+      if (relative)
+        simulator->clickAtOffsetUntilFound(x, y, full_path.c_str(), 200);
+      else
+        simulator->clickAtPointUntilFound(x, y, full_path.c_str(), 200);
+    }
+    else
+    {
+      simulator->clickAtOffsetIfFound(x, y, full_path.c_str());
+    }
+  }
+  else
+  {
+    // simulator->scrollAt(x, y, delta);
+  }
+}
   
 void handleOnMove(int x, int y, const char* path) override
 {
@@ -165,9 +191,9 @@ main(int argc, char* argv[])
     argparse_usage(&argparse);
     return -1;
   }
+
   pal_root_dir = wd;
   gfc_gc_init();
-    
   PawsHandler handler;
   pal::Program prog(&handler);
   prog.Evaluate(pal);
