@@ -77,6 +77,11 @@ void handleOnPaste(const char* text) override
 {
   simulator->pasteFromText(text);
 }
+
+void handleOnLoad(const char* path) override
+{
+  simulator->loadFromFile(path);
+}
   
 void handleOnEnter() override
 {
