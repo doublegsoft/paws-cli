@@ -1,2 +1,28 @@
 click@"deepseek.png"!(10, 10)
 
+click@"upload.png"!(10, 10)
+
+click@"pictures.png"!(10, 10)
+
+click@"open.png"!(10, 10)
+
+click@(774,1079)
+paste "比较左右两张图片，只需要告诉我相同或者不相同"
+
+click@"submit.png"!(10, 10)
+
+// submit double-check
+click@(777,1079)
+wait 1s
+enter
+
+// submit double-check
+wait 1s
+click@(777,1079)
+wait 1s
+enter
+
+click@"copy.png"!(20, 15)
+
+wait 1s
+save "ccbs.log"
